@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FIGU F1 — DRIVE</title>
+<style>
+:root{--bg:#080b10;--panel:#111923;--line:#293646;--text:#f4f7fb;--muted:#9cabbc;--red:#e10600;--lime:#d8ff3e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172536,#080b10 60%);color:var(--text);font:14px system-ui,Segoe UI,Arial,sans-serif}header{border-bottom:1px solid var(--line);background:#080b10eF;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:0;z-index:3}.logo{font-weight:1000;letter-spacing:.1em}.logo b{color:var(--red)}.tag{color:var(--muted);font-size:11px;letter-spacing:.12em}main{max-width:1250px;margin:auto;padding:15px;display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:14px}.panel{background:linear-gradient(145deg,#141d28,#0e141c);border:1px solid var(--line);border-radius:13px;padding:13px;min-width:0}.gamebox{position:relative;padding:0;overflow:hidden;background:#151e21}.canvas-wrap{position:relative;width:100%;aspect-ratio:900/650;min-height:360px}canvas{display:block;width:100%;height:100%;outline:none}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#05090bd9;padding:20px}.modal{max-width:480px;width:100%;padding:23px;background:#111923;border:1px solid #344254;border-radius:15px;box-shadow:0 20px 70px #0008}.modal h1{font-size:clamp(28px,4vw,42px);line-height:.98;letter-spacing:-.04em;margin:9px 0}.eyebrow{font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--lime);text-transform:uppercase}.muted{color:var(--muted)}button,select{font:inherit}button{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#222e3d;color:var(--text);font-weight:800;cursor:pointer}button:hover{filter:brightness(1.2)}button:disabled{opacity:.4}.primary{background:var(--red);border-color:var(--red)}.lime{background:var(--lime);border-color:var(--lime);color:#11160a}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}.stat{padding:10px;border-radius:9px;background:#0a1017;border:1px solid #26313e}.stat label{font-size:10px;letter-spacing:.1em;color:var(--muted);display:block;text-transform:uppercase}.stat strong{display:block;font-size:23px;margin-top:2px}.stat small{color:var(--muted)}.section{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;margin:0 0 10px}.bar{height:7px;background:#273342;border-radius:99px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--lime);width:0}.feed{height:155px;overflow:auto;display:flex;flex-direction:column;gap:6px}.feed div{font-size:12px;background:#0a1017;border-left:2px solid #485b70;border-radius:5px;padding:7px;color:#d1d9e3}.feed .hi{border-color:var(--lime);color:var(--lime)}.buttons{display:flex;flex-wrap:wrap;gap:7px}.help{font-size:12px;color:var(--muted);line-height:1.55}.key{display:inline-block;border:1px solid #4a596c;border-bottom-width:3px;padding:1px 6px;border-radius:4px;color:#fff;font-size:11px;background:#1c2632}.touch{display:none;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.touch button{min-height:50px;touch-action:none}.touch button:active{background:var(--lime);color:#111}.track-select{width:100%;padding:9px;background:#0a1017;border:1px solid var(--line);border-radius:8px;color:var(--text);margin:6px 0 12px}.finish{font-size:34px;font-weight:1000;color:var(--lime)}.foot{font-size:10px;color:#6e7b8c;margin-top:12px}
+@media(max-width:900px){main{grid-template-columns:1fr}.canvas-wrap{min-height:300px}.sidegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.sidegrid .panel{margin:0}.touch{display:grid}}
+@media(max-width:560px){main{padding:8px;gap:8px}.sidegrid{grid-template-columns:1fr}.canvas-wrap{min-height:280px}header{padding:10px}.tag{display:none}.panel{padding:10px}}
+</style>
+</head>
+<body>
+<header><div class="logo">FIGU <b>F1</b> — DRIVE</div><div class="tag">2026 ROOKIE DRIVER SIMULATOR</div><div class="buttons"><button id="save">SAVE</button><button id="reset">NEW CAREER</button></div></header>
+<main>
+<section class="panel gamebox">
+<div class="canvas-wrap"><canvas id="game" width="900" height="650" tabindex="0" aria-label="Driving game. Use arrow keys or WASD to drive."></canvas>
+<div class="overlay" id="overlay"><div class="modal" id="modal">
+<div class="eyebrow">Your seat awaits</div><h1>TAKE THE<br>WHEEL.</h1><p class="muted">A proper little top-down F1 driving game. Steer through corners, overtake rivals, and bring the car home.</p>
+<label class="help" for="team">Choose your 2026 team</label><select id="team" class="track-select"><option value="aston">Aston Martin — Fernando Alonso</option><option value="ferrari">Ferrari — Charles Leclerc</option><option value="mclaren">McLaren — Lando Norris</option><option value="redbull">Red Bull — Max Verstappen</option><option value="mercedes">Mercedes — George Russell</option><option value="williams">Williams — Carlos Sainz</option><option value="audi">Audi — Nico Hülkenberg</option><option value="haas">Haas — Oliver Bearman</option><option value="alpine">Alpine — Pierre Gasly</option><option value="racingbulls">Racing Bulls — Liam Lawson</option><option value="cadillac">Cadillac — Sergio Pérez</option></select>
+<label class="help" for="name">Driver name</label><input id="name" value="Figu" maxlength="20" style="width:100%;padding:10px;background:#0a1017;color:white;border:1px solid var(--line);border-radius:8px;margin:6px 0 14px">
+<button class="primary" id="start" style="width:100%;padding:13px">START ENGINE & GO →</button>
+<p class="help" style="margin-bottom:0">Controls: <span class="key">↑</span>/<span class="key">W</span> accelerate · <span class="key">↓</span>/<span class="key">S</span> brake · <span class="key">←</span>/<span class="key">A</span> steer · <span class="key">→</span>/<span class="key">D</span> steer · <span class="key">Space</span> handbrake</p>
+</div></div></div>
+<div class="touch" id="touch"><button data-key="left">◀ STEER</button><button data-key="up">▲ GAS</button><button data-key="right">STEER ▶</button><button data-key="down">▼ BRAKE</button><button data-key="space">HANDBRAKE</button><button id="touchPause">PAUSE</button></div>
+</section>
+<aside class="sidegrid">
+<div class="panel"><h2 class="section">Telemetry</h2><div class="stats"><div class="stat"><label>Speed</label><strong><span id="speed">0</span><small> km/h</small></strong></div><div class="stat"><label>Position</label><strong id="position">P11</strong></div><div class="stat"><label>Lap</label><strong id="lap">1/3</strong></div><div class="stat"><label>Race time</label><strong id="time">0.0<small> s</small></strong></div></div><div class="row"><span class="help">Car condition</span><b id="condition">100%</b></div><div class="bar"><i id="conditionBar"></i></div><div class="row" style="margin-top:12px"><span class="help">Championship points</span><b id="points">0</b></div><div class="row" style="margin-top:8px"><span class="help">Best lap</span><b id="best">—</b></div></div>
+<div class="panel"><h2 class="section">Race engineer</h2><p id="engineer" class="help">Radio check. You're clear to leave the garage.</p><div class="buttons"><button id="pause">PAUSE</button><button id="restart">RESTART RACE</button></div><div class="foot" id="status">Waiting in the garage.</div></div>
+<div class="panel"><h2 class="section">Radio messages</h2><div class="feed" id="feed"><div>Welcome to the team. Bring it home.</div></div></div>
+<div class="panel"><h2 class="section">Weekend targets</h2><p class="help">Finish the 3-lap race to score championship points. Overtake the AI cars, avoid the grass, and keep your car intact.</p><div class="row"><span class="help">Team</span><b id="teamName">Aston Martin</b></div><div class="row" style="margin-top:8px"><span class="help">Season rounds completed</span><b id="rounds">0/10</b></div><div class="foot">Fan-made game prototype. Fictionalized grid and handling model.</div></div>
+</aside>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d');
+const teams={
+aston:{name:'Aston Martin',color:'#168568',pace:1.0},ferrari:{name:'Ferrari',color:'#e8002d',pace:1.035},mclaren:{name:'McLaren',color:'#ff8700',pace:1.045},redbull:{name:'Red Bull',color:'#3671c6',pace:1.05},mercedes:{name:'Mercedes',color:'#27d7c0',pace:1.025},williams:{name:'Williams',color:'#64c4ff',pace:.985},audi:{name:'Audi',color:'#c7cbd0',pace:.97},haas:{name:'Haas',color:'#c5c7ca',pace:.965},alpine:{name:'Alpine',color:'#ff87bc',pace:.96},racingbulls:{name:'Racing Bulls',color:'#6692ff',pace:.98},cadillac:{name:'Cadillac',color:'#b8c3d3',pace:.94}};
+const aiDefs=[['Max Verstappen','#3671c6',1.05],['Lando Norris','#ff8700',1.04],['Charles Leclerc','#e8002d',1.03],['Oscar Piastri','#ff8700',1.025],['George Russell','#27d7c0',1.015],['Fernando Alonso','#168568',1.0],['Lewis Hamilton','#e8002d',1.01],['Carlos Sainz','#64c4ff',.995],['Alex Albon','#64c4ff',.98],['Pierre Gasly','#ff87bc',.975]];
+const keys={up:false,down:false,left:false,right:false,space:false};let s=null,raf=0,last=0;
+const W=900,H=650,CX=450,CY=320;
+const track={cx:450,cy:322,rx:300,ry:224,innerX:204,innerY:128,outerX:378,outerY:300};
+function load(){try{return JSON.parse(localStorage.getItem('figuDriveCareerV1'))}catch(e){return null}}
+function save(){if(!s)return;let d={team:s.team,name:s.name,points:s.points,rounds:s.rounds,best:s.best};localStorage.setItem('figuDriveCareerV1',JSON.stringify(d));msg('Career saved on this browser.',true)}
+function msg(text,hi=false){let d=document.createElement('div');d.textContent=text;if(hi)d.className='hi';$('feed').prepend(d);while($('feed').children.length>16)$('feed').lastChild.remove();$('engineer').textContent=text}
+function setup(){
+let old=load();if(old){$('team').value=old.team||'aston';$('name').value=old.name||'Figu';}
+$('overlay').style.display='flex';$('modal').innerHTML=`<div class="eyebrow">Your seat awaits</div><h1>TAKE THE<br>WHEEL.</h1><p class="muted">A top-down F1 driving game. Steer through corners, overtake rivals, and bring the car home.</p><label class="help" for="team">Choose your 2026 team</label><select id="team" class="track-select">${Object.entries(teams).map(([id,t])=>`<option value="${id}">${t.name}</option>`).join('')}</select><label class="help" for="name">Driver name</label><input id="name" value="${old?.name||'Figu'}" maxlength="20" style="width:100%;padding:10px;background:#0a1017;color:white;border:1px solid #293646;border-radius:8px;margin:6px 0 14px"><button class="primary" id="start" style="width:100%;padding:13px">START ENGINE & GO →</button><p class="help">Controls: ↑/W gas · ↓/S brake · ←/A and →/D steer · Space handbrake. Three laps per race.</p>`;
+if(old)$('team').value=old.team;
+$('start').onclick=()=>startCareer(old);
+}
+function startCareer(old){const team=$('team').value,name=($('name').value.trim()||'Rookie').slice(0,20);s={team,name,points:old?.team===team?old.points||0:0,rounds:old?.team===team?old.rounds||0:0,best:old?.team===team?old.best||null:null,lap:1,lapTime:0,raceTime:0,carHealth:100,player:null,ais:[],running:true,paused:false,finished:false,offTime:0,prevAngle:0,lastProgress:0,lapTimes:[],trackProgress:0,roundPoints:0};newRace();$('overlay').style.display='none';updatePanel();msg(`${name}, radio check. Let's get some points.`,true);last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+function newRace(){s.lap=1;s.lapTime=0;s.raceTime=0;s.carHealth=100;s.finished=false;s.paused=false;s.offTime=0;s.lapTimes=[];s.roundPoints=0;const startPos=pointAt(0,0);s.player={progress:0,lane:0,speed:0,x:startPos.x,y:startPos.y,angle:0,spin:0};s.ais=aiDefs.map((d,i)=>({name:d[0],color:d[1],pace:d[2],progress:((i+1)*.075)%1,lane:(i%2===0?-.22:.22),speed:0,offset:Math.random()*8}));updatePanel();draw();}
+function pointAt(p,lane=0){let a=p*Math.PI*2-Math.PI/2;let rx=track.rx+lane*30,ry=track.ry+lane*23;return {x:CX+Math.cos(a)*rx,y:CY+Math.sin(a)*ry,a};}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function angleDiff(a,b){return Math.atan2(Math.sin(a-b),Math.cos(a-b))}
+function update(dt){
+if(!s||s.paused||s.finished)return;
+s.raceTime+=dt;s.lapTime+=dt;
+const p=s.player,tm=teams[s.team];
+const accel=keys.up?155:0,brake=keys.down?235:0;
+p.speed+=accel*dt;p.speed-=brake*dt;p.speed-=p.speed*(keys.up?0.05:0.32)*dt;p.speed=clamp(p.speed,0,keys.space?85:tm.pace*115);
+let prev=pointAt(p.progress,p.lane),next=pointAt(p.progress+.001,p.lane);
+let desired=Math.atan2(next.y-prev.y,next.x-prev.x);
+const steer=(keys.left?-1:0)+(keys.right?1:0);
+p.angle+=steer*dt*(1.4+p.speed/95);
+if(!steer)p.angle+=angleDiff(desired,p.angle)*dt*(.9+p.speed/110);
+let scale=p.speed*dt/155;
+p.x+=Math.cos(p.angle)*scale*150;p.y+=Math.sin(p.angle)*scale*150;
+// project car onto nearest track progress using local angular position
+let dx=p.x-CX,dy=p.y-CY;let raw=(Math.atan2(dy/track.ry,dx/track.rx)+Math.PI/2+Math.PI*2)%(Math.PI*2)/(Math.PI*2);
+let pd=raw-p.progress;if(pd<-.5)pd+=1;if(pd>.5)pd-=1;
+if(Math.abs(pd)<.08)p.progress=(p.progress+pd*.16+1)%1;
+const pos=pointAt(p.progress,0);let radial=Math.hypot((p.x-CX)/track.rx,(p.y-CY)/track.ry);let off=radial<.76||radial>1.24;
+if(off){p.speed*=Math.max(.7,1-dt*.8);s.offTime+=dt;if(s.offTime>1.5){s.carHealth=Math.max(0,s.carHealth-dt*3);if(Math.random()<dt*.7)msg('Off track! Find the racing line.',false);}}else{s.offTime=0;}
+if(s.carHealth<=0){p.speed=Math.min(p.speed,35);if(Math.random()<dt)msg('Damage! The car is struggling. Finish if you can.');}
+for(const ai of s.ais){let pace=ai.pace*tm.pace;ai.speed+=(pace*100-ai.speed)*dt*.9;ai.progress=(ai.progress+(ai.speed/1000)*dt)%1;}
+const crossed=p.progress<s.lastProgress-.5;
+if(crossed){s.lapTimes.push(s.lapTime);if(!s.best||s.lapTime<s.best)s.best=s.lapTime;s.lapTime=0;s.lap++;if(s.lap>3)finishRace();else msg(`Start/finish line! Lap ${s.lap} of 3.`,true);}
+s.lastProgress=p.progress;
+for(const ai of s.ais){const a=pointAt(ai.progress,ai.lane),b={x:p.x,y:p.y};if(dist(a,b)<17){p.speed=Math.max(15,p.speed-30);s.carHealth=Math.max(0,s.carHealth-2);msg(`Contact with ${ai.name}! Keep it clean.`);}}
+}
+function finishRace(){s.finished=true;s.running=false;let order=[{name:s.name,progress:s.lapTimes.length+1,player:true},...s.ais.map(a=>({name:a.name,progress:a.progress+Math.floor(a.progress),player:false}))]; // position approximated by completed distance
+let p=s.player.progress;let ahead=s.ais.filter(a=>a.progress>p).length;let pos=clamp(11-ahead,1,11);const pts=[25,18,15,12,10,8,6,4,2,1];let earned=pts[pos-1]||0;s.points+=earned;s.roundPoints=earned;s.rounds++;msg(`CHEQUERED FLAG! P${pos} — ${earned} championship points.`,true);$('overlay').style.display='flex';$('modal').innerHTML=`<div class="eyebrow">Chequered flag · Round ${s.rounds}</div><h1>RACE<br>COMPLETE.</h1><div class="finish">P${pos}</div><p class="muted">${earned?`You scored ${earned} championship points.`:'No points this time — get back out there.'} ${s.carHealth<40?'The mechanics have work to do.':'The team will review the data.'}</p><div class="stats"><div class="stat"><label>Race time</label><strong>${s.raceTime.toFixed(1)}s</strong></div><div class="stat"><label>Championship</label><strong>${s.points} pts</strong></div></div><button class="primary" id="nextRace" style="width:100%;padding:13px">NEXT RACE →</button><button id="backGarage" style="width:100%;margin-top:8px">BACK TO GARAGE</button>`;$('nextRace').onclick=()=>{newRace();$('overlay').style.display='none';s.running=true;msg('Next round. New race, fresh tyres.',true);};$('backGarage').onclick=()=>setup();saveQuiet();updatePanel();}
+function saveQuiet(){try{localStorage.setItem('figuDriveCareerV1',JSON.stringify({team:s.team,name:s.name,points:s.points,rounds:s.rounds,best:s.best}))}catch(e){}}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function drawCar(x,y,angle,color,isPlayer=false){
+ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#07090c';ctx.fillRect(-12,-8,8,5);ctx.fillRect(4,-8,8,5);ctx.fillRect(-12,4,8,5);ctx.fillRect(4,4,8,5);
+ctx.fillStyle=color;ctx.fillRect(-16,-5,32,10);ctx.fillRect(-7,-9,14,18);ctx.fillRect(10,-11,7,22);ctx.fillRect(-18,-9,5,18);ctx.fillStyle=isPlayer?'#d8ff3e':'#e8edf4';ctx.fillRect(-4,-3,7,6);ctx.fillStyle='#fff';ctx.fillRect(13,-2,4,4);ctx.restore();
+}
+function draw(){
+ctx.clearRect(0,0,W,H);ctx.fillStyle='#18352a';ctx.fillRect(0,0,W,H);
+// subtle grass stripes
+ctx.globalAlpha=.16;for(let i=0;i<20;i++){ctx.fillStyle=i%2?'#376b45':'#0c251c';ctx.fillRect(i*50,0,25,H)}ctx.globalAlpha=1;
+// outer runoff then track ellipse
+ctx.fillStyle='#d8dce0';ctx.beginPath();ctx.ellipse(CX,CY,track.rx+40,track.ry+40,0,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#373e47';ctx.beginPath();ctx.ellipse(CX,CY,track.rx+26,track.ry+26,0,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#707984';ctx.beginPath();ctx.ellipse(CX,CY,track.rx+2,track.ry+2,0,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#343a42';ctx.beginPath();ctx.ellipse(CX,CY,track.rx-4,track.ry-4,0,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#18352a';ctx.beginPath();ctx.ellipse(CX,CY,track.rx-42,track.ry-42,0,0,Math.PI*2);ctx.fill();
+// curbs
+for(let i=0;i<72;i++){let a=i*Math.PI*2/72;ctx.strokeStyle=i%2?'#f1f2f2':'#e10600';ctx.lineWidth=7;ctx.beginPath();ctx.ellipse(CX,CY,track.rx+8,track.ry+8,a,a+Math.PI*2/72*.8);ctx.stroke();}
+// racing line dashes
+ctx.strokeStyle='#89919a';ctx.lineWidth=2;ctx.setLineDash([8,11]);ctx.beginPath();ctx.ellipse(CX,CY,track.rx+4,track.ry+4,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+// start finish line
+let sp=pointAt(0);ctx.save();ctx.translate(sp.x,sp.y);ctx.rotate(sp.a+Math.PI/2);for(let i=0;i<8;i++){ctx.fillStyle=i%2?'#15191f':'#f5f6f7';ctx.fillRect(-12+i*3,-13,3,26)}ctx.restore();
+// grandstand
+ctx.fillStyle='#131a22';ctx.fillRect(362,20,176,27);for(let i=0;i<16;i++){ctx.fillStyle=i%2?'#b9c3d0':'#e10600';ctx.fillRect(367+i*10,25,6,16)}
+// AI and player
+if(s){for(const ai of s.ais){let q=pointAt(ai.progress,ai.lane);drawCar(q.x,q.y,q.a+Math.PI/2,ai.color,false);}let p=s.player;drawCar(p.x||pointAt(0).x,p.y||pointAt(0).y,p.angle,teams[s.team].color,true);
+ctx.fillStyle='#f4f7fb';ctx.font='bold 13px system-ui';ctx.fillText('FIGU F1 · LIVE',18,26);ctx.fillStyle='#d8ff3e';ctx.font='bold 12px system-ui';ctx.fillText(s.paused?'PAUSED':s.finished?'FINISHED':'RACE IN PROGRESS',18,45);
+if(s.paused&&!s.finished){ctx.fillStyle='#0009';ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff';ctx.font='900 42px system-ui';ctx.textAlign='center';ctx.fillText('PAUSED',W/2,H/2);ctx.textAlign='left';}}
+}
+function updatePanel(){if(!s)return;const p=s.player||{speed:0};$('speed').textContent=Math.round(p.speed*2.7);$('position').textContent='P'+(1+s.ais.filter(a=>a.progress>s.player.progress).length);$('lap').textContent=Math.min(s.lap,3)+'/3';$('time').textContent=s.raceTime.toFixed(1);$('condition').textContent=Math.round(s.carHealth)+'%';$('conditionBar').style.width=s.carHealth+'%';$('conditionBar').style.background=s.carHealth<35?'#ff6464':'#d8ff3e';$('points').textContent=s.points;$('best').textContent=s.best?s.best.toFixed(2)+'s':'—';$('teamName').textContent=teams[s.team].name;$('rounds').textContent=s.rounds+'/10';$('status').textContent=s.finished?'Race complete':s.paused?'Paused':s.running?'Racing — keep it on the tarmac':'Ready';}
+function loop(now){let dt=Math.min((now-last)/1000,.04);last=now;if(s&&!s.paused&&!s.finished){update(dt);if(Math.random()<.06)updatePanel();}draw();raf=requestAnimationFrame(loop);}
+function togglePause(){if(!s||s.finished)return;s.paused=!s.paused;$('pause').textContent=s.paused?'RESUME':'PAUSE';$('touchPause').textContent=s.paused?'RESUME':'PAUSE';msg(s.paused?'Radio: race paused.':'Radio: back racing.',true);updatePanel();}
+document.addEventListener('keydown',e=>{const map={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',Space:'space'};if(map[e.code]){keys[map[e.code]]=true;e.preventDefault();}if(e.code==='Escape')togglePause();});
+document.addEventListener('keyup',e=>{const map={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',Space:'space'};if(map[e.code])keys[map[e.code]]=false;});
+document.querySelectorAll('[data-key]').forEach(b=>{let k=b.dataset.key;const on=e=>{e.preventDefault();keys[k]=true},off=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointercancel',off);b.addEventListener('pointerleave',off);});
+$('touchPause').onclick=togglePause;$('pause').onclick=togglePause;$('restart').onclick=()=>{if(s){newRace();s.running=true;msg('Race restarted. Focus up.',true);}};$('save').onclick=()=>{if(s)save();else msg('Start a career first.')};$('reset').onclick=()=>{if(confirm('Start a new driving career?')){localStorage.removeItem('figuDriveCareerV1');setup();}};setup();draw();
+})();
+</script>
+</body>
+</html>
